@@ -1,0 +1,57 @@
+
+#counter{
+    color: #DD2D4A;
+    background-color: #F49CBB;
+    border-color: #ffd5ed;
+    border-style: double;
+    border-width: 0.50em;
+    padding: 1em;
+    margin-top: 1em ;
+    margin-bottom: 1em ;
+}
+
+.center {
+    margin: auto;
+    width:fit-content;
+}
+
+
+#tablero{
+    padding: 0.5em;
+    background-color:#F49CBB;
+    animation: mymove 2s infinite;
+}
+
+.fila{
+    width: fit-content;
+    display: flex;
+}
+
+.casilla{
+    width: 2em;
+    height: 2em;
+    margin: 0.15em;
+    background-color:#DD2D4A;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.revelada{
+    background-color: #CBEEF3;
+}
+
+.bandera{
+    background-color: #ffc4d8;
+}
+
+.mina{
+    background-color: #880D1E;
+}
+.errorMessage{
+    padding: 1em;
+    text-align: center;
+
+}
+
