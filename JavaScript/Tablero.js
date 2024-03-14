@@ -77,7 +77,7 @@ class Tablero {
       const casilla = this.matrizCasillas[i][j];
       casilla.revelada = true;
 
-      if (casilla.mina == 1) this.gameOver();
+      if (casilla.mina == 1) throw new Error ("Game Over")
       else if (this.matrizCasillas[i][j].adyacentes == 0) {
         this.revelarCasilla(i + 1, j)
         this.revelarCasilla(i - 1, j)
@@ -100,7 +100,7 @@ class Tablero {
       if (banderasColocadas < this.numMinas) {
         casilla.bandera = true
         banderasColocadas++
-      } else addErrorMessage("No flags left 😔")
+      } else throw new Error ("No flags left")
 
     }
 

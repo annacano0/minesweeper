@@ -1,0 +1,28 @@
+#form-container{
+    width: 50%;
+    margin:auto;
+    margin-top: 4em;
+    background-color:  #f49cbba4;
+    padding: 1em 2em 1em 1em;
+}
+
+.form-section{
+    padding: 0.5em;
+    margin-bottom: 01em;
+}
+
+.form-section input{
+    color: #880D1E;
+    font-weight: bold;
+    font-size: 1em;
+    padding: 0.5em;
+    margin: 1em 1.5em 0em 0em;
+    width: 100%;
+    border: 2px solid red;
+    border-radius: 4px;
+}
+
+.button-container{
+    width: 100%;
+    text-align: center;  
+}

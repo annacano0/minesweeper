@@ -1,41 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User</title>
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/styles.css">
-    <link rel="stylesheet" href="../styles/game.css">
+    <link rel="stylesheet" href="../styles/form.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="../JavaScript/index.js"></script>
+    <script src="../JavaScript/Form.js"></script>
     <script src="../JavaScript/Tablero.js"></script>
     <script src="../JavaScript/Casilla.js"></script>
 </head>
+
 <body onload="init()">
     <header>
-        <h1>LOG IN</h1> 
+        <h1>YOUR INFO</h1>
         <section id="counter-container"></section>
-     </header>
-     <div id="form-container"class="center">
+    </header>
+    <div id="form-container">
         <form>
-            <label for="name">Name</label>
-            <input id="name" type="text">
+            <div class="form-section">
+                <label for="name">Name</label>
+                <input id="name" type="text">
+            </div>
 
-            <label for="surname">Surname</label>
-            <input id="surname" type="text">
+            <div class="form-section">
+                <label for="surname">Surname</label>
+                <input id="surname" type="text">
+            </div>
 
-            <label for="birthday">Birthday</label>
-            <input id="birthday" type="date">
+            <div class="form-section">
+                <label for="birthday">Birthday</label>
+                <input id="birthday" type="date">
+            </div>
 
-            <label for="nick">Nick</label>
-            <input id="nick" type="text">
+            <div class="form-section">
+                <label for="nick">Nick</label>
+                <input id="nick" type="text">
+            </div>
 
-           <button>Start Game</button>
+            <div class="form-section">
+                <label for="rows">Rows</label>
+                <input id="rows" type="text">
+            </div>
+
+            <div class="form-section">
+                <label for="columns">Columns</label>
+                <input id="columns" type="text">
+            </div>
+
+            <div class="form-section">
+                <label for="mines">Mines</label>
+                <input id="mines" type="text">
+            </div>
+
+            <div class="form-section">
+                <label for="score">Score</label>
+                <input id="score" type="text">
+            </div>
+
+            <div class="form-section">
+                <label for="password">Password</label>
+                <input id="password" type="text">
+            </div>
+
+            <div class="button-container">
+                <button>Save</button>
+
+            </div>
         </form>
-     </div>
-    
+    </div>
+
 </body>
+
 </html>

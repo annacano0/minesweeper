@@ -4,24 +4,26 @@ let banderasColocadas = 0
 
 
 /***************     FUNCIONES     *******************/
+//TODO: crear excepciones de game over, you won, no flags. HAy que lanzarlas en las clases, y que llamen a las funciones respectivas
+//TODO: hacer que casilla tenga el tar de posicion y mina(? y que no se le tenga que pasar tablero.
 
 function pintaTablero(tablero) {
-    let contenedor = document.getElementById("tablero")
-    contenedor.classList.add("center", "corners");
-    //recorrer tablero
-    for (let fila of tablero.matrizCasillas) {
-      //se crea fila
-      let filaFisica = document.createElement('div')
-      filaFisica.classList.add("fila")
-      //se crean casillas
-      for (let elemento of fila) {
-        let casilla = configurarCasilla(elemento, contenedor, tablero)//se configura el texto, si tiene bamdera, el css,...
-        filaFisica.appendChild(casilla);
-      }
-      contenedor.appendChild(filaFisica);
+  let contenedor = document.getElementById("tablero")
+  contenedor.classList.add("center", "corners");
+  //recorrer tablero
+  for (let fila of tablero.matrizCasillas) {
+    //se crea fila
+    let filaFisica = document.createElement('div')
+    filaFisica.classList.add("fila")
+    //se crean casillas
+    for (let elemento of fila) {
+      let casilla = configurarCasilla(elemento, contenedor, tablero)//se configura el texto, si tiene bamdera, el css,...
+      filaFisica.appendChild(casilla);
     }
-    addContador(tablero)
-    
+    contenedor.appendChild(filaFisica);
+  }
+  addContador(tablero)
+
 }
 
 function configurarCasilla(elemento, contenedor, tablero) {
@@ -35,14 +37,14 @@ function configurarCasilla(elemento, contenedor, tablero) {
   }
   if (elemento.bandera == true) addEmojiBandera(casilla);
   //se añaden eventos
-  if(!tablero.isGameOver){
-  casilla.addEventListener("contextmenu", (ev) => eventoClickBandera(ev, contenedor, tablero, elemento.posicionX, elemento.posicionY))
-  casilla.addEventListener("click", () => eventoClickRevelar(contenedor, tablero, elemento.posicionX, elemento.posicionY))
-  } else gameOverDOM(9)
- return casilla
+  if (!tablero.isGameOver) {
+    casilla.addEventListener("contextmenu", (ev) => eventoClickBandera(ev, contenedor, tablero, elemento.posicionX, elemento.posicionY))
+    casilla.addEventListener("click", () => eventoClickRevelar(contenedor, tablero, elemento.posicionX, elemento.posicionY))
+  } else gameOverDOM()
+  return casilla
 }
 
-function addEmojiBomba( casilla) {
+function addEmojiBomba(casilla) {
   casilla.classList.add("mina");
   let minaEmoji = document.createElement("span");
   minaEmoji.textContent = "💥";
@@ -58,18 +60,30 @@ function addEmojiBandera(casilla) {
 }
 
 function eventoClickBandera(ev, contenedor, tablero, x, y) {
-  ev.preventDefault();
+  try{
+    ev.preventDefault();
   tablero.toggleFlag(y, x)
   console.log("click bandera")
   contenedor.innerHTML = ""
   pintaTablero(tablero)
+  }catch (error){
+    console.log("Error: ", error.message)
+    addErrorMessage("No flags left 😔")
+  }
+  
 }
 
 function eventoClickRevelar(contenedor, tablero, x, y) {
-  tablero.revelarCasilla(y, x)
-  console.log("click revelar")
-  contenedor.innerHTML = ""
-  pintaTablero(tablero)
+  try {
+    tablero.revelarCasilla(y, x)
+    console.log("click revelar")
+    contenedor.innerHTML = ""
+    pintaTablero(tablero)
+  } catch (error) {
+    console.log("Error: ", error.message);
+    gameOverDOM()
+  }
+
 }
 function addContador(tablero) {
   let contenedor = document.getElementById("counter-container");
@@ -84,7 +98,7 @@ function addErrorMessage(message) {
   let container = document.getElementById("errorContainer");
   let messageDiv = document.createElement('p');
   messageDiv.classList.add("errorMessage")
-  messageDiv.textContent = message;
+  messageDiv.innerHTML = message;
   container.appendChild(messageDiv);
 }
 
@@ -97,7 +111,8 @@ function gameOverDOM() {
   let i = 10;
   const idInterval = setInterval(() => {
     removeErrorMessage();
-    addErrorMessage("¡BOOM!\nGame will restart in " + i-- + " seconds");
+    let message=`¡BOOM! <br> Game will restart in ${i--} seconds`
+   addErrorMessage(message);
     if (i === 0) {
       clearInterval(idInterval);
       location.reload();
