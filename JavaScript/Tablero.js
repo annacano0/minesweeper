@@ -84,6 +84,13 @@ class Tablero {
         this.revelarCasilla(i, j + 1)
         this.revelarCasilla(i, j - 1)
 
+        //esquinas
+        this.revelarCasilla(i-1, j-1)
+        this.revelarCasilla(i-1, j+1)
+
+        this.revelarCasilla(i+1, j-1)
+        this.revelarCasilla(i+1, j+1)
+        
       }
     }
   }
