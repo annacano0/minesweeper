@@ -9,7 +9,7 @@ let banderasColocadas = 0
 
 function pintaTablero(tablero) {
   let contenedor = document.getElementById("tablero")
-  contenedor.classList.add("center", "corners");
+  contenedor.classList.add("center");
   //recorrer tablero
   for (let fila of tablero.matrizCasillas) {
     //se crea fila
@@ -122,7 +122,7 @@ function gameOverDOM() {
 }
 
 function init() {
-  let nuevoTablero = new Tablero(13, 13, 13);
+  let nuevoTablero = new Tablero(20, 20, 20);
   pintaTablero(nuevoTablero);
 }
 
