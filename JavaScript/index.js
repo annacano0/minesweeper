@@ -1,11 +1,10 @@
-/***** CONSTANTES *****/
+/***** GLOBALES *****/
 let banderasColocadas = 0
-
+let casillasPorRevelar = 0
 
 
 /***************     FUNCIONES     *******************/
-//TODO: crear excepciones de game over, you won, no flags. HAy que lanzarlas en las clases, y que llamen a las funciones respectivas
-//TODO: hacer que casilla tenga el tar de posicion y mina(? y que no se le tenga que pasar tablero.
+//TODO: hacer que casilla tenga el ATR de posicion y mina(? y que no se le tenga que pasar tablero.
 
 function pintaTablero(tablero) {
   let contenedor = document.getElementById("tablero")
@@ -77,6 +76,7 @@ function eventoClickRevelar(contenedor, tablero, x, y) {
   try {
     tablero.revelarCasilla(y, x)
     console.log("click revelar")
+    if(banderasColocadas==casillasPorRevelar) gameOverDOM()
     contenedor.innerHTML = ""
     pintaTablero(tablero)
   } catch (error) {
@@ -108,11 +108,12 @@ function removeErrorMessage() {
 }
 
 function gameOverDOM() {
-  let i = 10;
+   let i = 10;
   const idInterval = setInterval(() => {
     removeErrorMessage();
     let message=`¡BOOM! <br> Game will restart in ${i--} seconds`
-   addErrorMessage(message);
+    if(banderasColocadas==casillasPorRevelar) message=`YOU WON! <br> Game will restart in ${i--} seconds`
+    addErrorMessage(message);
     if (i === 0) {
       clearInterval(idInterval);
       location.reload();
@@ -122,8 +123,10 @@ function gameOverDOM() {
 }
 
 function init() {
-  let nuevoTablero = new Tablero(20, 20, 20);
+  let nuevoTablero = new Tablero(3, 3, 1);
+  casillasPorRevelar==nuevoTablero.filas*nuevoTablero.columnas
   pintaTablero(nuevoTablero);
+  
 }
 
 

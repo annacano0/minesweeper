@@ -76,8 +76,11 @@ class Tablero {
     if (i >= 0 && i < this.matrizCasillas.length && j >= 0 && j < this.matrizCasillas[0].length && !this.matrizCasillas[i][j].revelada && !this.matrizCasillas[i][j].bandera) {
       const casilla = this.matrizCasillas[i][j];
       casilla.revelada = true;
-
-      if (casilla.mina == 1) throw new Error ("Game Over")
+      casillasPorRevelar--
+      if (casilla.mina == 1){
+        this.gameOver()
+        throw new Error ("Game Over")
+      } 
       else if (this.matrizCasillas[i][j].adyacentes == 0) {
         this.revelarCasilla(i + 1, j)
         this.revelarCasilla(i - 1, j)
