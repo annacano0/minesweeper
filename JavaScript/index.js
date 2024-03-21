@@ -1,14 +1,13 @@
 /***** GLOBALES *****/
 let banderasColocadas = 0
 let casillasPorRevelar = 0
-
+let userLost=false
 
 /***************     FUNCIONES  TABLERO  *******************/
 //TODO: hacer que casilla tenga el ATR de posicion y mina(? y que no se le tenga que pasar tablero.
 //TODO: hacer que el juego acabe (WIN and LOSE)
 
 function pintaTablero(tablero) {
-  //TODO:crear tablero si no existe o recuperar elemento tablero 
   let tableroDOM =getOrCreateElement("tablero");
     let contenedor = document.getElementById("contenedorJuego");
     contenedor.appendChild(tableroDOM);
@@ -52,8 +51,8 @@ function configurarCasilla(elemento, contenedor, tablero) {
   if (elemento.bandera == true) addEmojiBandera(casilla);
   //se añaden eventos
   if (!tablero.isGameOver) {
-    casilla.addEventListener("contextmenu", (ev) => eventoClickBandera(ev, contenedor, tablero, elemento.posicionX, elemento.posicionY))
-    casilla.addEventListener("click", () => eventoClickRevelar(contenedor, tablero, elemento.posicionX, elemento.posicionY))
+    casilla.addEventListener("contextmenu", (ev) => eventoClickBandera(ev, tablero, elemento.posicionX, elemento.posicionY))
+    casilla.addEventListener("click", () => eventoClickRevelar(tablero, elemento.posicionX, elemento.posicionY))
   } else gameOverDOM()
   return casilla
 }
@@ -76,7 +75,7 @@ function addEmojiBandera(casilla) {
 /***************     FUNCIONES  HANDLER  DE  EVENTOS *******************/
 
 
-function eventoClickBandera(ev, contenedor, tablero, x, y) {
+function eventoClickBandera(ev, tablero, x, y) {
   try {
     ev.preventDefault();
    if(tablero.matrizCasillas[y][x].revelada==false) tablero.toggleFlag(y, x)
@@ -89,14 +88,16 @@ function eventoClickBandera(ev, contenedor, tablero, x, y) {
 
 }
 
-function eventoClickRevelar(contenedor, tablero, x, y) {
+function eventoClickRevelar(tablero, x, y) {
   try {
     tablero.revelarCasilla(y, x)
     console.log("click revelar")
-    if (banderasColocadas == casillasPorRevelar) gameOverDOM()
+    console.log("Casillas por revelar: "+casillasPorRevelar)
+    if (tablero.numMinas== casillasPorRevelar) gameOverDOM()
     pintaTablero(tablero)
   } catch (error) {
     console.log("Error: ", error.message);
+    userLost=true
     gameOverDOM()
     pintaTablero(tablero)
   }
@@ -144,7 +145,7 @@ function removeErrorMessage() {
 function startGame(infoString){
   info_usuario = JSON.parse(infoString);
   let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
-  casillasPorRevelar == nuevoTablero.filas * nuevoTablero.columnas
+  casillasPorRevelar = nuevoTablero.filas * nuevoTablero.columnas
   pintaTablero(nuevoTablero);
 }
 
@@ -153,7 +154,7 @@ function gameOverDOM() {
   const idInterval = setInterval(() => {
     removeErrorMessage();
     let message = `¡BOOM! <br> Game will restart in ${i--} seconds`
-    if (banderasColocadas == casillasPorRevelar) message = `YOU WON! <br> Game will restart in ${i--} seconds`
+    if (banderasColocadas == casillasPorRevelar&&!userLost) message = `YOU WON! <br> Game will restart in ${i--} seconds`
     addErrorMessage(message);
     if (i === 0) {
       clearInterval(idInterval);
@@ -178,7 +179,7 @@ function getLocalStorage(modifyData) {
    addErrorMessage("You have to fill the form before playing 🤓 ")
     window.open("http://127.0.0.1:5500/html/form.html")
 
-  } window.open("http://127.0.0.1:5500/html/form.html")
+  }else window.open("http://127.0.0.1:5500/html/form.html")
 
   removeErrorMessage()
   return window.localStorage.getItem("user")

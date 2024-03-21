@@ -8,9 +8,10 @@ class Tablero {
 
   //constructor
   constructor(filas, columnas, numMinas) {
-    if (filas > 3) this.filas = filas;
-    if (columnas > 3) this.columnas = columnas;
-    if (numMinas > 1) this.numMinas = numMinas;
+    if (filas > 3 && filas <21) this.filas = filas;
+    if (columnas > 3 && columnas<21) this.columnas = columnas;
+    if (numMinas >= 1 && numMinas< this.filas*this.columnas - 2) this.numMinas = numMinas;
+    else this.numMinas=this.filas*this.columnas - (this.filas+(this.filas/2)); //opcion de generacion del num de minas, por si el usuario se ha pasado
     this.matrizCasillas = this.crearTablero();
     this.colocarMinas();
     this.addAdyacentes();
