@@ -11,7 +11,10 @@ class Tablero {
     if (filas > 3 && filas <21) this.filas = filas;
     if (columnas > 3 && columnas<21) this.columnas = columnas;
     if (numMinas >= 1 && numMinas< this.filas*this.columnas - 2) this.numMinas = numMinas;
-    else this.numMinas=this.filas*this.columnas - (this.filas+(this.filas/2)); //opcion de generacion del num de minas, por si el usuario se ha pasado
+    else {
+      this.numMinas=this.filas*this.columnas - (this.filas-2); //opcion de generacion del num de minas, por si el usuario se ha pasado
+      if(this.filas*this.columnas==9) this.numMinas=1;
+    }
     this.matrizCasillas = this.crearTablero();
     this.colocarMinas();
     this.addAdyacentes();
@@ -65,7 +68,7 @@ class Tablero {
     }
   }
 
-
+/*metodo que comprueba si la casilla es una mina y retorna 0 o 1 */
   esMina(i, j) {
     if (i >= 0 && i < this.matrizCasillas.length && j >= 0 && j < this.matrizCasillas[i].length) {
       if (this.matrizCasillas[i][j].mina == 1) return 1

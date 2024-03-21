@@ -4,30 +4,8 @@ let casillasPorRevelar = 0
 let userLost=false
 
 /***************     FUNCIONES  TABLERO  *******************/
-//TODO: hacer que casilla tenga el ATR de posicion y mina(? y que no se le tenga que pasar tablero.
-//TODO: hacer que el juego acabe (WIN and LOSE)
 
-function pintaTablero(tablero) {
-  let tableroDOM =getOrCreateElement("tablero");
-    let contenedor = document.getElementById("contenedorJuego");
-    contenedor.appendChild(tableroDOM);
-    tableroDOM.classList.add("center");
- 
-  //recorrer tablero
-  for (let fila of tablero.matrizCasillas) {
-    //se crea fila
-    let filaFisica = document.createElement('div')
-    filaFisica.classList.add("fila")
-    //se crean casillas
-    for (let elemento of fila) {
-      let casilla = configurarCasilla(elemento, tableroDOM, tablero)//se configura el texto, si tiene bamdera, el css,...
-      filaFisica.appendChild(casilla);
-    }
-    tableroDOM.appendChild(filaFisica);
-  }
-  addContador(tablero)
-}
-
+/*funcion que crea o añade un elemento mediante el id que debe tener*/
 function getOrCreateElement(id){
   let elemento = document.getElementById(id);
   if (!elemento) {
@@ -39,24 +17,50 @@ function getOrCreateElement(id){
   return elemento
 }
 
-function configurarCasilla(elemento, contenedor, tablero) {
+/*funcion que toma de referencia el objeto tablero, clase Tablero y lo crea en el DOM*/
+function pintaTablero(tablero) {
+  let tableroDOM =getOrCreateElement("tablero");//se crea o se llama al elemento, dependiendo si existe o no
+    let contenedor = document.getElementById("contenedorJuego");
+    contenedor.appendChild(tableroDOM);
+    tableroDOM.classList.add("center");
+ 
+  //recorrer tablero
+  for (let fila of tablero.matrizCasillas) {
+    //se crea fila
+    let filaFisica = document.createElement('div')
+    filaFisica.classList.add("fila")
+    //se crean casillas
+    for (let elemento of fila) {
+      let casilla = configurarCasilla(elemento, tablero)//se configura el texto, si tiene bamdera, clases css,...
+      filaFisica.appendChild(casilla);
+    }
+    tableroDOM.appendChild(filaFisica);
+  }
+  addContador(tablero)
+}
+
+/* funcion que coge como refererencia una casilla (elemento) 
+y segun sus propiedades crea una casilla en el DOM con esas caracteristicas*/
+function configurarCasilla(elemento, tablero) {
   let casilla = document.createElement("div")
+
+  //se añaden textos, emojis y clases
   if (elemento.adyacentes != 0 && elemento.revelada == true && elemento.mina != 1) casilla.textContent = elemento.adyacentes
   casilla.classList.add("casilla", "corners")
   if (elemento.revelada == true) {
     casilla.classList.add("revelada");
-    //si se revela una casilla en dom y es una mina, se pinta y añade emoji de mina
-    if (elemento.mina == 1) addEmojiBomba(casilla)
+    if (elemento.mina == 1) addEmojiBomba(casilla) 
   }
   if (elemento.bandera == true) addEmojiBandera(casilla);
-  //se añaden eventos
+
+  //se añaden eventos para click si el juego no ha acabado
   if (!tablero.isGameOver) {
     casilla.addEventListener("contextmenu", (ev) => eventoClickBandera(ev, tablero, elemento.posicionX, elemento.posicionY))
     casilla.addEventListener("click", () => eventoClickRevelar(tablero, elemento.posicionX, elemento.posicionY))
   } else gameOverDOM()
   return casilla
 }
-
+/*funcion que añade un emoji de bomba a una casilla del DOM*/
 function addEmojiBomba(casilla) {
   casilla.classList.add("mina");
   let minaEmoji = document.createElement("span");
@@ -64,6 +68,7 @@ function addEmojiBomba(casilla) {
   casilla.appendChild(minaEmoji);
 }
 
+/*funcion que añade un emoji de bandera a una casilla del DOM y le añade la clase bandera*/
 function addEmojiBandera(casilla) {
   casilla.classList.add("bandera");
   let banderaEmoji = document.createElement("span");
@@ -74,12 +79,15 @@ function addEmojiBandera(casilla) {
 
 /***************     FUNCIONES  HANDLER  DE  EVENTOS *******************/
 
-
+/* funcion que maneja el click derecho sobre una casilla, pasando el evento (para evitar que salte el context menu),
+ el tablero, y la posicion de la casilla. Tambien vuelve a llamar a que se pinte el tablero y si no hay mas banderas disponibles 
+ hace un catch de una excepcion de Tablero, y añade el mensaje de error al DOM*/
 function eventoClickBandera(ev, tablero, x, y) {
   try {
     ev.preventDefault();
-   if(tablero.matrizCasillas[y][x].revelada==false) tablero.toggleFlag(y, x)
-    console.log("click bandera")
+   if(tablero.matrizCasillas[y][x].revelada==false){
+    tablero.toggleFlag(y, x)
+   } 
     pintaTablero(tablero)
   } catch (error) {
     console.log("Error: ", error.message)
@@ -88,11 +96,12 @@ function eventoClickBandera(ev, tablero, x, y) {
 
 }
 
+/* funcion que maneja el click izquierdo sobre una casilla, pasando el tablero, y la posicion de la casilla.
+Tambien vuelve a llamar a que se pinte el tablero y si se revela una casilla con mina 
+ hace un catch de una excepcion de Tablero, y añade el mensaje de error al DOM*/
 function eventoClickRevelar(tablero, x, y) {
   try {
     tablero.revelarCasilla(y, x)
-    console.log("click revelar")
-    console.log("Casillas por revelar: "+casillasPorRevelar)
     if (tablero.numMinas== casillasPorRevelar) gameOverDOM()
     pintaTablero(tablero)
   } catch (error) {
@@ -101,11 +110,11 @@ function eventoClickRevelar(tablero, x, y) {
     gameOverDOM()
     pintaTablero(tablero)
   }
-
 }
 
 /***************     FUNCIONES AÑADIR ELEMENTOS A DOM  *******************/
 
+/*funcion que añade al DOM el contador de banderas colocadas*/
 function addContador(tablero) {
   let contenedor = document.getElementById("counter-container");
   contenedor.innerHTML = ""
@@ -115,7 +124,7 @@ function addContador(tablero) {
   banderas.textContent = banderasColocadas + "🚩/" + tablero.numMinas + "🚩";
   contenedor.appendChild(banderas)
 }
-
+/*funcion que añade al dom el boton para acceder a los ajustes*/
 function addSettingsButton() {
   let contenedor = document.getElementById("settings-container");
   contenedor.innerHTML = ""
@@ -123,10 +132,11 @@ function addSettingsButton() {
   button.setAttribute("id", "settings");
   button.classList.add("center")
   button.textContent = "⚙️";
-  button.addEventListener("click", ()=>{getLocalStorage(true)})
+  button.addEventListener("click", ()=>{getLocalStorage()})
   contenedor.appendChild(button);
 }
 
+/* funcion que añade un mensaje pasado por parametro al dom, especificamente al contenedor de mensajes*/
 function addErrorMessage(message) {
   let container = document.getElementById("errorContainer");
   let messageDiv = document.createElement('p');
@@ -134,7 +144,7 @@ function addErrorMessage(message) {
   messageDiv.innerHTML = message;
   container.appendChild(messageDiv);
 }
-
+/* funcion que limpia el dom de mesajes en el contenedor de mensajes*/
 function removeErrorMessage() {
   let container = document.getElementById("errorContainer");
   container.innerHTML = "";
@@ -142,6 +152,7 @@ function removeErrorMessage() {
 
 /***************     FUNCIONES DE PARTIDA  *******************/
 
+/*funcion que recupera los datos del usuario, inicializa un tablero, y lo pinta*/
 function startGame(infoString){
   info_usuario = JSON.parse(infoString);
   let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
@@ -149,6 +160,8 @@ function startGame(infoString){
   pintaTablero(nuevoTablero);
 }
 
+/*funcion que se ejecuta al acabar el juego y añade en el dom un mensaje (de victoria o derrota) ademas de un temporizador 
+que indica cuando se iniciara otra partida*/
 function gameOverDOM() {
   let i = 10;
   const idInterval = setInterval(() => {
@@ -156,7 +169,7 @@ function gameOverDOM() {
     let message = `¡BOOM! <br> Game will restart in ${i--} seconds`
     if (banderasColocadas == casillasPorRevelar&&!userLost) message = `YOU WON! <br> Game will restart in ${i--} seconds`
     addErrorMessage(message);
-    if (i === 0) {
+    if (i == 0) {
       clearInterval(idInterval);
       location.reload();
     }
@@ -174,7 +187,7 @@ function saveToLocalStorage(key, value) {
 }
 
 /*Metodo que accede al local storage para recuperar la informacion del usuario, si no hay informacion, se abre el formulario*/
-function getLocalStorage(modifyData) {
+function getLocalStorage() {
   if (window.localStorage.getItem("user")==null){
    addErrorMessage("You have to fill the form before playing 🤓 ")
     window.open("http://127.0.0.1:5500/html/form.html")
@@ -185,15 +198,18 @@ function getLocalStorage(modifyData) {
   return window.localStorage.getItem("user")
   }
  
+/***************     INIT    *******************/
+
 
 function init() {
-  removeErrorMessage()
-  addSettingsButton()
+  removeErrorMessage()//elimina mensajes de error previos
+  addSettingsButton()//añade el boton de ajustes
   let info_usuario=" "
-  if(window.localStorage.getItem("user")==null) info_usuario = getLocalStorage(false)  
+  //recupera los datos guardados
+  if(window.localStorage.getItem("user")==null) info_usuario = getLocalStorage()  
   else info_usuario = window.localStorage.getItem("user")
   removeErrorMessage()
-  if (info_usuario) startGame(info_usuario)
+  if (info_usuario) startGame(info_usuario)//si hay informacion guardada se podra iniciar el juego, si no , no.
 
 }
 

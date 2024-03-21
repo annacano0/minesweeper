@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User</title>
+    <link rel="icon" href="../src/logo.webp" type="image/x-icon">
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/form.css">
@@ -39,6 +40,11 @@
             <div class="form-section">
                 <label for="nick">Nick</label>
                 <input id="nick" type="text" required>
+            </div>
+
+            <div class="form-section">
+                <label for="mail">Mail</label>
+                <input id="mail" type="text" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
             </div>
 
             <div class="form-section">
