@@ -85,10 +85,9 @@ function addEmojiBandera(casilla) {
 function eventoClickBandera(ev, tablero, x, y) {
   try {
     ev.preventDefault();
-   if(tablero.matrizCasillas[y][x].revelada==false){
-    tablero.toggleFlag(y, x)
-   } 
+   if(tablero.matrizCasillas[y][x].revelada==false)tablero.toggleFlag(y, x) 
     pintaTablero(tablero)
+    if (tablero.numMinas == banderasColocadas) gameOverDOM()
   } catch (error) {
     console.log("Error: ", error.message)
     addErrorMessage("No flags left 😔")
@@ -102,7 +101,7 @@ Tambien vuelve a llamar a que se pinte el tablero y si se revela una casilla con
 function eventoClickRevelar(tablero, x, y) {
   try {
     tablero.revelarCasilla(y, x)
-    if (tablero.numMinas== casillasPorRevelar) gameOverDOM()
+    if (tablero.numMinas == banderasColocadas) gameOverDOM()
     pintaTablero(tablero)
   } catch (error) {
     console.log("Error: ", error.message);
