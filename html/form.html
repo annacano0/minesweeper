@@ -20,55 +20,50 @@
         <section id="counter-container"></section>
     </header>
     <div id="form-container">
-        <form>
+        <form id="userForm">
             <div class="form-section">
                 <label for="name">Name</label>
-                <input id="name" type="text">
+                <input id="name" type="text" pattern="[a-zA-Z]{3,}" title="Name must be longer than 2 characters and have no numbers" required>
             </div>
 
             <div class="form-section">
                 <label for="surname">Surname</label>
-                <input id="surname" type="text">
+                <input id="surname" type="text" pattern="[a-zA-Z]{3,}" title="Name must be longer than 2 characters and have no numbers" required>
             </div>
 
             <div class="form-section">
                 <label for="birthday">Birthday</label>
-                <input id="birthday" type="date">
+                <input id="birthday" type="date" required>
             </div>
 
             <div class="form-section">
                 <label for="nick">Nick</label>
-                <input id="nick" type="text">
+                <input id="nick" type="text" required>
             </div>
 
             <div class="form-section">
                 <label for="rows">Rows</label>
-                <input id="rows" type="text">
+                <input id="rows" type="number" min="3" max="20">
             </div>
 
             <div class="form-section">
                 <label for="columns">Columns</label>
-                <input id="columns" type="text">
+                <input id="columns" type="number" min="3" max="20">
             </div>
 
             <div class="form-section">
                 <label for="mines">Mines</label>
-                <input id="mines" type="text">
-            </div>
-
-            <div class="form-section">
-                <label for="score">Max score for game</label>
-                <input id="score" type="text">
+                <input id="mines" type="number" min="1">
             </div>
 
             <div class="form-section">
                 <label for="password">Password</label>
-                <input id="password" type="text">
+                <input id="password" type="password" pattern="[a-zA-Z0-9]{6,}" title="Six or more characters with no special characters" required>
             </div>
 
             <div class="button-container">
-                <button>Save</button>
-
+                <button id="buttonSubmit" type="submit">Save</button>
+            </div>
         </form>
     </div>
 
