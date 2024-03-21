@@ -1,29 +1,29 @@
 /***** GLOBALES *****/
 let banderasColocadas = 0
 let casillasPorRevelar = 0
-let userLost=false
+let userLost = false
 
 /***************     FUNCIONES  TABLERO  *******************/
 
 /*funcion que crea o añade un elemento mediante el id que debe tener*/
-function getOrCreateElement(id){
+function getOrCreateElement(id) {
   let elemento = document.getElementById(id);
   if (!elemento) {
     elemento = document.createElement('div');
     elemento.id = 'tablero';
   } else {
-    elemento.innerHTML = ''; 
+    elemento.innerHTML = '';
   }
   return elemento
 }
 
 /*funcion que toma de referencia el objeto tablero, clase Tablero y lo crea en el DOM*/
 function pintaTablero(tablero) {
-  let tableroDOM =getOrCreateElement("tablero");//se crea o se llama al elemento, dependiendo si existe o no
-    let contenedor = document.getElementById("contenedorJuego");
-    contenedor.appendChild(tableroDOM);
-    tableroDOM.classList.add("center");
- 
+  let tableroDOM = getOrCreateElement("tablero");//se crea o se llama al elemento, dependiendo si existe o no
+  let contenedor = document.getElementById("contenedorJuego");
+  contenedor.appendChild(tableroDOM);
+  tableroDOM.classList.add("center");
+
   //recorrer tablero
   for (let fila of tablero.matrizCasillas) {
     //se crea fila
@@ -49,7 +49,7 @@ function configurarCasilla(elemento, tablero) {
   casilla.classList.add("casilla", "corners")
   if (elemento.revelada == true) {
     casilla.classList.add("revelada");
-    if (elemento.mina == 1) addEmojiBomba(casilla) 
+    if (elemento.mina == 1) addEmojiBomba(casilla)
   }
   if (elemento.bandera == true) addEmojiBandera(casilla);
 
@@ -85,7 +85,7 @@ function addEmojiBandera(casilla) {
 function eventoClickBandera(ev, tablero, x, y) {
   try {
     ev.preventDefault();
-   if(tablero.matrizCasillas[y][x].revelada==false)tablero.toggleFlag(y, x) 
+    if (tablero.matrizCasillas[y][x].revelada == false) tablero.toggleFlag(y, x)
     pintaTablero(tablero)
     if (tablero.numMinas == banderasColocadas) gameOverDOM()
   } catch (error) {
@@ -105,7 +105,7 @@ function eventoClickRevelar(tablero, x, y) {
     pintaTablero(tablero)
   } catch (error) {
     console.log("Error: ", error.message);
-    userLost=true
+    userLost = true
     gameOverDOM()
     pintaTablero(tablero)
   }
@@ -131,7 +131,7 @@ function addSettingsButton() {
   button.setAttribute("id", "settings");
   button.classList.add("center")
   button.textContent = "⚙️";
-  button.addEventListener("click", ()=>{getLocalStorage()})
+  button.addEventListener("click", () => { getLocalStorage() })
   contenedor.appendChild(button);
 }
 
@@ -143,6 +143,7 @@ function addErrorMessage(message) {
   messageDiv.innerHTML = message;
   container.appendChild(messageDiv);
 }
+
 /* funcion que limpia el dom de mesajes en el contenedor de mensajes*/
 function removeErrorMessage() {
   let container = document.getElementById("errorContainer");
@@ -152,7 +153,8 @@ function removeErrorMessage() {
 /***************     FUNCIONES DE PARTIDA  *******************/
 
 /*funcion que recupera los datos del usuario, inicializa un tablero, y lo pinta*/
-function startGame(infoString){
+function startGame(infoString) {
+  removeErrorMessage()
   info_usuario = JSON.parse(infoString);
   let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
   casillasPorRevelar = nuevoTablero.filas * nuevoTablero.columnas
@@ -166,7 +168,7 @@ function gameOverDOM() {
   const idInterval = setInterval(() => {
     removeErrorMessage();
     let message = `¡BOOM! <br> Game will restart in ${i--} seconds`
-    if (banderasColocadas == casillasPorRevelar&&!userLost) message = `YOU WON! <br> Game will restart in ${i--} seconds`
+    if (banderasColocadas == casillasPorRevelar && !userLost) message = `YOU WON! <br> Game will restart in ${i--} seconds`
     addErrorMessage(message);
     if (i == 0) {
       clearInterval(idInterval);
@@ -176,7 +178,7 @@ function gameOverDOM() {
   removeErrorMessage()
 }
 
-  /***************     FUNCIONES  STORAGE  *******************/
+/***************     FUNCIONES  STORAGE  *******************/
 
 
 /* Funcion que es llamada desde form.js para añadir los datos al localStorage*/
@@ -187,27 +189,27 @@ function saveToLocalStorage(key, value) {
 
 /*Metodo que accede al local storage para recuperar la informacion del usuario, si no hay informacion, se abre el formulario*/
 function getLocalStorage() {
-  if (window.localStorage.getItem("user")==null){
-   addErrorMessage("You have to fill the form before playing 🤓 ")
+  if (window.localStorage.getItem("user") == null) {
     window.open("http://127.0.0.1:5500/html/form.html")
 
-  }else window.open("http://127.0.0.1:5500/html/form.html")
-
-  removeErrorMessage()
+  } else window.open("http://127.0.0.1:5500/html/form.html")
   return window.localStorage.getItem("user")
-  }
- 
+}
+
 /***************     INIT    *******************/
 
 
 function init() {
-  removeErrorMessage()//elimina mensajes de error previos
+  window.localStorage.clear()
   addSettingsButton()//añade el boton de ajustes
-  let info_usuario=" "
+  let info_usuario = " "
+
   //recupera los datos guardados
-  if(window.localStorage.getItem("user")==null) info_usuario = getLocalStorage()  
+  if (window.localStorage.getItem("user") == null) {
+    addErrorMessage("You have to fill the form before playing 🤓 ")
+    info_usuario = getLocalStorage()
+  }
   else info_usuario = window.localStorage.getItem("user")
-  removeErrorMessage()
   if (info_usuario) startGame(info_usuario)//si hay informacion guardada se podra iniciar el juego, si no , no.
 
 }
