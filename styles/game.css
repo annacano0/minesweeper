@@ -1,14 +1,27 @@
+#header-container {
+    display: flex;
+    justify-content: space-evenly; /* Alinear los elementos a los extremos */
+    align-items: center; /* Alinear verticalmente al centro */
+}
 
-#counter{
+#counter-container, #settings-container {
+    display: inline-block; /* Hacer que los contenedores sean inline-block */
+}
+
+
+
+#counter {
+    height: 1em;
     color: #DD2D4A;
     background-color: #F49CBB;
     border-color: #ffd5ed;
     border-style: double;
     border-width: 0.50em;
-    padding: 1em;
-    margin-top: 1em ;
-    margin-bottom: 1em ;
+    padding: 0.75em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
+
 
 .center {
     margin: auto;

@@ -3,12 +3,9 @@ let banderasColocadas = 0
 let casillasPorRevelar = 0
 
 
-/***************     FUNCIONES     *******************/
+/***************     FUNCIONES  TABLERO  *******************/
 //TODO: hacer que casilla tenga el ATR de posicion y mina(? y que no se le tenga que pasar tablero.
-//TODO:haecr popup
 //TODO: hacer que el juego acabe (WIN and LOSE)
-//añadir opcion de modificar los datos
-//hacer que no se puedan añadir banderas a casillas reveladas
 
 function pintaTablero(tablero) {
   //TODO:crear tablero si no existe o recuperar elemento tablero 
@@ -76,12 +73,14 @@ function addEmojiBandera(casilla) {
   casilla.classList.add("bandera");
 }
 
+/***************     FUNCIONES  HANDLER  DE  EVENTOS *******************/
+
+
 function eventoClickBandera(ev, contenedor, tablero, x, y) {
   try {
     ev.preventDefault();
-    tablero.toggleFlag(y, x)
+   if(tablero.matrizCasillas[y][x].revelada==false) tablero.toggleFlag(y, x)
     console.log("click bandera")
-    contenedor.innerHTML = ""
     pintaTablero(tablero)
   } catch (error) {
     console.log("Error: ", error.message)
@@ -95,14 +94,17 @@ function eventoClickRevelar(contenedor, tablero, x, y) {
     tablero.revelarCasilla(y, x)
     console.log("click revelar")
     if (banderasColocadas == casillasPorRevelar) gameOverDOM()
-    contenedor.innerHTML = ""
     pintaTablero(tablero)
   } catch (error) {
     console.log("Error: ", error.message);
     gameOverDOM()
+    pintaTablero(tablero)
   }
 
 }
+
+/***************     FUNCIONES AÑADIR ELEMENTOS A DOM  *******************/
+
 function addContador(tablero) {
   let contenedor = document.getElementById("counter-container");
   contenedor.innerHTML = ""
@@ -112,6 +114,18 @@ function addContador(tablero) {
   banderas.textContent = banderasColocadas + "🚩/" + tablero.numMinas + "🚩";
   contenedor.appendChild(banderas)
 }
+
+function addSettingsButton() {
+  let contenedor = document.getElementById("settings-container");
+  contenedor.innerHTML = ""
+  let button = document.createElement('button');
+  button.setAttribute("id", "settings");
+  button.classList.add("center")
+  button.textContent = "⚙️";
+  button.addEventListener("click", ()=>{getLocalStorage(true)})
+  contenedor.appendChild(button);
+}
+
 function addErrorMessage(message) {
   let container = document.getElementById("errorContainer");
   let messageDiv = document.createElement('p');
@@ -123,6 +137,15 @@ function addErrorMessage(message) {
 function removeErrorMessage() {
   let container = document.getElementById("errorContainer");
   container.innerHTML = "";
+}
+
+/***************     FUNCIONES DE PARTIDA  *******************/
+
+function startGame(infoString){
+  info_usuario = JSON.parse(infoString);
+  let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
+  casillasPorRevelar == nuevoTablero.filas * nuevoTablero.columnas
+  pintaTablero(nuevoTablero);
 }
 
 function gameOverDOM() {
@@ -140,41 +163,36 @@ function gameOverDOM() {
   removeErrorMessage()
 }
 
+  /***************     FUNCIONES  STORAGE  *******************/
+
+
 /* Funcion que es llamada desde form.js para añadir los datos al localStorage*/
 function saveToLocalStorage(key, value) {
   window.localStorage.setItem(key, value);
+  window.location.reload();
 }
 
 /*Metodo que accede al local storage para recuperar la informacion del usuario, si no hay informacion, se abre el formulario*/
 function getLocalStorage(modifyData) {
-  if (!modifyData){
-    addErrorMessage("You have to fill the form before playing 🤓 ")
+  if (window.localStorage.getItem("user")==null){
+   addErrorMessage("You have to fill the form before playing 🤓 ")
     window.open("http://127.0.0.1:5500/html/form.html")
 
-  } else{
-     if (window.localStorage.getItem("user") == null) {
-    window.open("http://127.0.0.1:5500/html/form.html")
-  } else {
-    removeErrorMessage()
-  }
+  } window.open("http://127.0.0.1:5500/html/form.html")
+
+  removeErrorMessage()
   return window.localStorage.getItem("user")
   }
  
-}
 
 function init() {
   removeErrorMessage()
+  addSettingsButton()
   let info_usuario=" "
   if(window.localStorage.getItem("user")==null) info_usuario = getLocalStorage(false)  
   else info_usuario = window.localStorage.getItem("user")
   removeErrorMessage()
-  if (info_usuario) {
-    info_usuario = JSON.parse(info_usuario);
-    let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
-    casillasPorRevelar == nuevoTablero.filas * nuevoTablero.columnas
-    pintaTablero(nuevoTablero);
-  }
-
+  if (info_usuario) startGame(info_usuario)
 
 }
 
