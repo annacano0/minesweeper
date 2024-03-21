@@ -60,6 +60,8 @@ function configurarCasilla(elemento, tablero) {
   } else gameOverDOM()
   return casilla
 }
+
+
 /*funcion que añade un emoji de bomba a una casilla del DOM*/
 function addEmojiBomba(casilla) {
   casilla.classList.add("mina");
@@ -154,7 +156,8 @@ function removeErrorMessage() {
 
 /*funcion que recupera los datos del usuario, inicializa un tablero, y lo pinta*/
 function startGame(infoString) {
-  removeErrorMessage()
+  addSettingsButton()//añade el boton de ajustes
+  removeErrorMessage()//se eliminan mensajes previos
   info_usuario = JSON.parse(infoString);
   let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
   casillasPorRevelar = nuevoTablero.filas * nuevoTablero.columnas
@@ -201,7 +204,6 @@ function getLocalStorage() {
 
 function init() {
   window.localStorage.clear()
-  addSettingsButton()//añade el boton de ajustes
   let info_usuario = " "
 
   //recupera los datos guardados
@@ -210,6 +212,7 @@ function init() {
     info_usuario = getLocalStorage()
   }
   else info_usuario = window.localStorage.getItem("user")
+
   if (info_usuario) startGame(info_usuario)//si hay informacion guardada se podra iniciar el juego, si no , no.
 
 }
