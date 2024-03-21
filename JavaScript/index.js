@@ -5,7 +5,7 @@ let casillasPorRevelar = 0
 
 /***************     FUNCIONES     *******************/
 //TODO: hacer que casilla tenga el ATR de posicion y mina(? y que no se le tenga que pasar tablero.
-
+//TODO:prueba para ver si funciona :)
 function pintaTablero(tablero) {
   let contenedor = document.getElementById("tablero")
   contenedor.classList.add("center");
