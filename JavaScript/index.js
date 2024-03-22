@@ -203,9 +203,7 @@ function getLocalStorage() {
 
 
 function init() {
-  window.localStorage.clear()
   let info_usuario = " "
-
   //recupera los datos guardados
   if (window.localStorage.getItem("user") == null) {
     addErrorMessage("You have to fill the form before playing 🤓 ")
