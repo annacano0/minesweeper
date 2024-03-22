@@ -10,9 +10,8 @@ function manageFormSubmission(){
     let columns = document.getElementById("columns").value;
     let mines=document.getElementById("mines").value;
     let password=document.getElementById("password").value;
-    let birthdayField = document.getElementById("birthday");
-
-    if (validAge==true)toItemForStorage(name, surname, birthday, nick, mail, rows, columns, mines, password);
+    console.log("Se intenta guardar info")
+    toItemForStorage(name, surname, birthday, nick, mail, rows, columns, mines, password);
 
 }
 /* funcion que comprueba que el usuario sea mayor de edad*/
@@ -55,34 +54,45 @@ function toItemForStorage(name, surname, birthday, nick, mail, rows, columns, mi
     window.close()//se cierra la ventana actual
 }
 
+ /*añade eventos al formulario*/
+function addEventListeners() {
+    let birthdayField = document.getElementById("birthday");
+    let button = document.getElementById("buttonSubmit");
+
+    birthdayField.addEventListener("blur", checkAge);
+
+    button.addEventListener("click", checkAge);
+}
+
+ /* funcion que rellena los campos y bloquea  si ya hay datos*/
+function fillAndLockFields() {
+    let nameField = document.getElementById("name");
+    let surnameField = document.getElementById("surname");
+    let birthdayField = document.getElementById("birthday");
+    let nickField = document.getElementById("nick");
+    let mailField = document.getElementById("mail");
+    let passwordField = document.getElementById("password");
+
+    if (window.localStorage.getItem("user") !== null) {
+        let formData = JSON.parse(window.localStorage.getItem("user"));
+        nameField.value = formData.name;
+        surnameField.value = formData.surname;
+        birthdayField.value = formData.birthday;
+        nickField.value = formData.nick;
+        mailField.value = formData.mail;
+        passwordField.value = formData.password;
+
+        // Bloquear los campos
+        nameField.disabled = true;
+        surnameField.disabled = true;
+        birthdayField.disabled = true;
+        nickField.disabled = true;
+        mailField.disabled = true;
+        passwordField.disabled = true;
+    }
+}
+
 function init(){
-    //rellenar y bloquear campos name, surname birthday nick y password si ya estan llenos en el localStorage
-        let nameField = document.getElementById("name");
-        let surnameField = document.getElementById("surname");
-        let birthdayField = document.getElementById("birthday");
-        let nickField = document.getElementById("nick");
-        let mailField = document.getElementById("mail");
-        let passwordField = document.getElementById("password");
-        //añadir eventos a los elementos
-        birthdayField.addEventListener("onblur", checkAge)
-        let button=document.getElementById("buttonSubmit")
-        button.addEventListener("click", checkAge);
-    
-        if (window.localStorage.getItem("user") !== null) {
-            let formData = JSON.parse(window.localStorage.getItem("user"));//obtener los datos
-            nameField.value = formData.name;
-            surnameField.value = formData.surname;
-            birthdayField.value = formData.birthday;
-            nickField.value = formData.nick;
-            mailField.value = formData.mail;
-            passwordField.value = formData.password;
-            
-            //bloquear los campos
-            nameField.disabled = true;
-            surnameField.disabled = true;
-            birthdayField.disabled = true;
-            nickField.disabled = true;
-            mailField.disabled = true;
-            passwordField.disabled = true;
-        }
+    fillAndLockFields();//se rellenan y bloquean los campos si ya hay informacion
+    addEventListeners();// se añaden eventos 
 }

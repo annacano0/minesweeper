@@ -201,7 +201,6 @@ function getLocalStorage() {
 
 /***************     INIT    *******************/
 
-
 function init() {
   let info_usuario = " "
   //recupera los datos guardados
