@@ -171,7 +171,7 @@ function gameOverDOM() {
   const idInterval = setInterval(() => {
     removeErrorMessage();
     let message = `¡BOOM! <br> Game will restart in ${i--} seconds`
-    if (banderasColocadas == casillasPorRevelar && !userLost) message = `YOU WON! <br> Game will restart in ${i--} seconds`
+    if (banderasColocadas == casillasPorRevelar || !userLost) message = `YOU WON! <br> Game will restart in ${i--} seconds`
     addErrorMessage(message);
     if (i == 0) {
       clearInterval(idInterval);
@@ -202,6 +202,7 @@ function getLocalStorage() {
 /***************     INIT    *******************/
 
 function init() {
+  //window.localStorage.clear();
   let info_usuario = " "
   //recupera los datos guardados
   if (window.localStorage.getItem("user") == null) {

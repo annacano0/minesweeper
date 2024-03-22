@@ -61,7 +61,7 @@ function addEventListeners() {
 
     birthdayField.addEventListener("blur", checkAge);
 
-    button.addEventListener("click", checkAge);
+    button.addEventListener("click", manageFormSubmission);
 }
 
  /* funcion que rellena los campos y bloquea  si ya hay datos*/
