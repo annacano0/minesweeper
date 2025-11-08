@@ -158,7 +158,13 @@ function removeErrorMessage() {
 function startGame(infoString) {
   addSettingsButton()//añade el boton de ajustes
   removeErrorMessage()//se eliminan mensajes previos
-  info_usuario = JSON.parse(infoString);
+  info_usuario = {
+    columns: 10,
+    rows: 10,
+    mines: 10
+  }
+  if (infoString) info_usuario = JSON.parse(infoString);
+
   let nuevoTablero = new Tablero(info_usuario.columns, info_usuario.rows, info_usuario.mines);
   casillasPorRevelar = nuevoTablero.filas * nuevoTablero.columnas
   pintaTablero(nuevoTablero);
@@ -203,16 +209,14 @@ function getLocalStorage() {
 
 function init() {
   //window.localStorage.clear();
-  let info_usuario = " "
+  let info_usuario = "";
   //recupera los datos guardados
-  if (window.localStorage.getItem("user") == null) {
-    addErrorMessage("You have to fill the form before playing 🤓 ")
-    info_usuario = getLocalStorage()
-  }
+  if (window.localStorage.getItem("user") == null) startGame();
   else info_usuario = window.localStorage.getItem("user")
 
-  if (info_usuario) startGame(info_usuario)//si hay informacion guardada se podra iniciar el juego, si no , no.
+  console.log("Info usuario: ", info_usuario)
 
+  startGame(info_usuario);
 }
 
 

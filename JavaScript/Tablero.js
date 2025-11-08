@@ -8,12 +8,12 @@ class Tablero {
 
   //constructor
   constructor(filas, columnas, numMinas) {
-    if (filas > 3 && filas <21) this.filas = filas;
-    if (columnas > 3 && columnas<21) this.columnas = columnas;
-    if (numMinas >= 1 && numMinas< this.filas*this.columnas - 2) this.numMinas = numMinas;
+    if (filas > 3 && filas < 21) this.filas = filas;
+    if (columnas > 3 && columnas < 21) this.columnas = columnas;
+    if (numMinas >= 1 && numMinas < this.filas * this.columnas - 2) this.numMinas = numMinas;
     else {
-      this.numMinas=this.filas*this.columnas - (this.filas-2); //opcion de generacion del num de minas, por si el usuario se ha pasado
-      if(this.filas*this.columnas==9) this.numMinas=1;
+      this.numMinas = this.filas * this.columnas - (this.filas - 2); //opcion de generacion del num de minas, por si el usuario se ha pasado
+      if (this.filas * this.columnas == 9) this.numMinas = 1;
     }
     this.matrizCasillas = this.crearTablero();
     this.colocarMinas();
@@ -68,7 +68,7 @@ class Tablero {
     }
   }
 
-/*metodo que comprueba si la casilla es una mina y retorna 0 o 1 */
+  /*metodo que comprueba si la casilla es una mina y retorna 0 o 1 */
   esMina(i, j) {
     if (i >= 0 && i < this.matrizCasillas.length && j >= 0 && j < this.matrizCasillas[i].length) {
       if (this.matrizCasillas[i][j].mina == 1) return 1
@@ -81,10 +81,10 @@ class Tablero {
       const casilla = this.matrizCasillas[i][j];
       casilla.revelada = true;
       casillasPorRevelar--
-      if (casilla.mina == 1){
+      if (casilla.mina == 1) {
         this.gameOver()
-        throw new Error ("Game Over")
-      } 
+        throw new Error("Game Over")
+      }
       else if (this.matrizCasillas[i][j].adyacentes == 0) {
         this.revelarCasilla(i + 1, j)
         this.revelarCasilla(i - 1, j)
@@ -92,12 +92,12 @@ class Tablero {
         this.revelarCasilla(i, j - 1)
 
         //esquinas
-        this.revelarCasilla(i-1, j-1)
-        this.revelarCasilla(i-1, j+1)
+        this.revelarCasilla(i - 1, j - 1)
+        this.revelarCasilla(i - 1, j + 1)
 
-        this.revelarCasilla(i+1, j-1)
-        this.revelarCasilla(i+1, j+1)
-        
+        this.revelarCasilla(i + 1, j - 1)
+        this.revelarCasilla(i + 1, j + 1)
+
       }
     }
   }
@@ -114,7 +114,7 @@ class Tablero {
       if (banderasColocadas < this.numMinas) {
         casilla.bandera = true
         banderasColocadas++
-      } else throw new Error ("No flags left")
+      } else throw new Error("No flags left")
 
     }
 
